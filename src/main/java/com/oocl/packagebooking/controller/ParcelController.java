@@ -5,7 +5,7 @@ import com.oocl.packagebooking.serveice.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin
 @RestController
 public class ParcelController {
     @Autowired
@@ -14,6 +14,7 @@ public class ParcelController {
     public ResponseEntity createParcel(@RequestBody Parcel parcel){
         return ResponseEntity.ok(parcelService.createParcel(parcel));
     }
+
     @GetMapping("/parcels")
     public ResponseEntity getParcels(){
         return ResponseEntity.ok(parcelService.getAllParcels());
@@ -26,5 +27,9 @@ public class ParcelController {
     public ResponseEntity updateParcelByOrderid(@PathVariable int id,@RequestBody Parcel parcel){
         return ResponseEntity.ok(parcelService.UpdateParcelStatusById(id, parcel));
     }
+//    @PutMapping(value = "/parcels/{id}",params = {"name"})
+////    public ResponseEntity updateParcelTimeByOrderidAndName(@PathVariable int id,@RequestParam String name,@RequestBody Parcel parcel){
+////        return ResponseEntity.ok(parcelService.UpdateParcelStatusById(id, parcel));
+////    }
 
 }

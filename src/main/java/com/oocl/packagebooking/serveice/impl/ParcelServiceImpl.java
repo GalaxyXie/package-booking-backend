@@ -29,5 +29,15 @@ public class ParcelServiceImpl implements ParcelService {
         return oldParcel;
 
     }
+    public Parcel UpdateParcelTimeById(int Id,String name,Parcel parcel){
+        Parcel oldParcel=parcelRepository.findById(Id).orElse(null);
+        if (oldParcel.getCustomName().equals(name)){
+        oldParcel.setStatus(parcel.getStatus());
+        parcelRepository.save(oldParcel);
+        return oldParcel;}
+        else
+            return null;
+
+    }
 
 }

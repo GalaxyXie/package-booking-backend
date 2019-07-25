@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -80,15 +82,15 @@ class ParcelControllerTest {
         Parcel oldParcel=new Parcel("Laura","15342217675","未预约","2019/7/25");
         Parcel newParcel=new Parcel("Laura","15342217675","已取件","2019/7/25");
         oldParcel.setOrderId(1);
-        newParcel.setOrderId(1);
+
         String result=gson.toJson(newParcel);
         parcelService.createParcel(oldParcel);
-        given(parcelService.UpdateParcelStatusById(1,newParcel)).willReturn(newParcel);
+        given(parcelService.UpdateParcelStatusById(anyInt(),any(Parcel.class))).willReturn(newParcel);
 
         mockMvc.perform(put("/parcels/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(newParcel)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andExpect(content().json(gson.toJson(newParcel)));
     }
 
 
