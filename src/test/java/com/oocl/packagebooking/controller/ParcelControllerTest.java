@@ -74,6 +74,22 @@ class ParcelControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(new Gson().toJson(returnParcels,List.class)));
     }
+    @Test
+    void should_return_the_newParcelwhen_update_Parcel_status_by_Id() throws Exception {
+        Gson gson = new Gson();
+        Parcel oldParcel=new Parcel("Laura","15342217675","未预约","2019/7/25");
+        Parcel newParcel=new Parcel("Laura","15342217675","已取件","2019/7/25");
+        oldParcel.setOrderId(1);
+        newParcel.setOrderId(1);
+        String result=gson.toJson(newParcel);
+        parcelService.createParcel(oldParcel);
+        given(parcelService.UpdateParcelStatusById(1,newParcel)).willReturn(newParcel);
+
+        mockMvc.perform(put("/parcels/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(newParcel)))
+                .andExpect(status().isOk());
+    }
 
 
 }

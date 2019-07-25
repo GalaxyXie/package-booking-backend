@@ -22,5 +22,12 @@ public class ParcelServiceImpl implements ParcelService {
     public List<Parcel>getParcelsByStatus(String status){
         return parcelRepository.findParcelsByStatus(status);
     }
+    public Parcel UpdateParcelStatusById(int Id,Parcel parcel){
+        Parcel oldParcel=parcelRepository.findById(Id).orElse(null);
+        oldParcel.setStatus(parcel.getStatus());
+        parcelRepository.save(oldParcel);
+        return oldParcel;
+
+    }
 
 }

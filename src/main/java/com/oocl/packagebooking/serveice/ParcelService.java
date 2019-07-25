@@ -10,4 +10,5 @@ public interface ParcelService {
     public Parcel createParcel(Parcel parcel);
     public List<Parcel>getAllParcels();
     public List<Parcel>getParcelsByStatus(String status);
+    public Parcel UpdateParcelStatusById(int Id,Parcel parcel);
 }

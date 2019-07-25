@@ -22,5 +22,9 @@ public class ParcelController {
     public ResponseEntity getParcelsByStatus(@RequestParam String status){
         return ResponseEntity.ok(parcelService.getParcelsByStatus(status));
     }
+    @PutMapping("/parcels/{id}")
+    public ResponseEntity updateParcelByOrderid(@PathVariable int id,@RequestBody Parcel parcel){
+        return ResponseEntity.ok(parcelService.UpdateParcelStatusById(id, parcel));
+    }
 
 }
