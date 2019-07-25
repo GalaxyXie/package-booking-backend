@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -40,7 +41,7 @@ class ParcelControllerTest {
     @Test
     void should_return_the_Parcel_when_create_a_Parcel() throws Exception {
         Gson gson = new Gson();
-        Parcel parcel = new Parcel("Laura","15342217675","未取件","2019/7/25");
+        Parcel parcel = new Parcel("Laura","15342217675","已预约","2019/7/25");
         parcel.setOrderId(23213);
         String result=gson.toJson(parcel);
         when(parcelService.createParcel(parcel)).thenReturn(parcel);
@@ -50,8 +51,8 @@ class ParcelControllerTest {
     @Test
     void should_return_the_Parcel_List_when_find_all_Parcels() throws Exception {
         List<Parcel> parcels= new ArrayList<>();
-        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/25"));
-        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/26"));
+        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/25"));
+        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/26"));
         given(parcelService.getAllParcels()).willReturn(parcels);
 
         mockMvc.perform(get("/parcels"))
@@ -59,15 +60,20 @@ class ParcelControllerTest {
                 .andExpect(content().json(new Gson().toJson(parcels,List.class)));
     }
     @Test
-    void should_return_the_parkingLot_List_when_find_ParkingLots_by_Page() throws Exception {
-        List<Parcel> parcels= new ArrayList<>();
-        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/25"));
+    void should_return_the_Parcel_List_when_find_Parcels_by_Status() throws Exception {
+        List<Parcel> parcels = new ArrayList<>();
+        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/25"));
+        parcels.add( new Parcel("Laura","15342217675","已预约","2019/7/25"));
+        parcels.add( new Parcel("Laura","15342217675","已取件","2019/7/26"));
+        List<Parcel> returnParcels=parcels.stream().filter(parcel -> parcel.getStatus().equals("已预约")).collect(Collectors.toList());
+        given(parcelService.getParcelsByStatus("已预约")).willReturn(returnParcels);
 
-        given(parcelService.getAllParcels()).willReturn(parcels);
-
-        mockMvc.perform(get("/parking-lots"))
+        mockMvc.perform(get("/parcels")
+                .param("status", "已预约")
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(new Gson().toJson(parcels,List.class)));
+                .andExpect(content().json(new Gson().toJson(returnParcels,List.class)));
     }
+
 
 }

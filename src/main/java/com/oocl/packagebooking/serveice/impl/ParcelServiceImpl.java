@@ -19,5 +19,8 @@ public class ParcelServiceImpl implements ParcelService {
     public List<Parcel> getAllParcels(){
         return parcelRepository.findAll();
     }
+    public List<Parcel>getParcelsByStatus(String status){
+        return parcelRepository.findParcelsByStatus(status);
+    }
 
 }

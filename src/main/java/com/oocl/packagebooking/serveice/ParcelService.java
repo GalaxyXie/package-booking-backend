@@ -9,4 +9,5 @@ import java.util.List;
 public interface ParcelService {
     public Parcel createParcel(Parcel parcel);
     public List<Parcel>getAllParcels();
+    public List<Parcel>getParcelsByStatus(String status);
 }

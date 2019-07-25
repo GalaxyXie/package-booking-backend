@@ -4,10 +4,7 @@ import com.oocl.packagebooking.model.Parcel;
 import com.oocl.packagebooking.serveice.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ParcelController {
@@ -20,6 +17,10 @@ public class ParcelController {
     @GetMapping("/parcels")
     public ResponseEntity getParcels(){
         return ResponseEntity.ok(parcelService.getAllParcels());
+    }
+    @GetMapping(value = "/parcels",params = {"status"})
+    public ResponseEntity getParcelsByStatus(@RequestParam String status){
+        return ResponseEntity.ok(parcelService.getParcelsByStatus(status));
     }
 
 }
