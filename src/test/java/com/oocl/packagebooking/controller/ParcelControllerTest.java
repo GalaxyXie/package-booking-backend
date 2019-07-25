@@ -18,6 +18,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -34,7 +38,7 @@ class ParcelControllerTest {
     private ParcelService parcelService;
 
     @Test
-    void should_return_the_parkingLot_when_create_a_ParkingLost() throws Exception {
+    void should_return_the_Parcel_when_create_a_Parcel() throws Exception {
         Gson gson = new Gson();
         Parcel parcel = new Parcel("Laura","15342217675","未取件","2019/7/25");
         parcel.setOrderId(23213);
@@ -43,4 +47,27 @@ class ParcelControllerTest {
         mockMvc.perform(post("/parcels").contentType(MediaType.APPLICATION_JSON).content(result))
                 .andExpect(status().isOk());
     }
+    @Test
+    void should_return_the_Parcel_List_when_find_all_Parcels() throws Exception {
+        List<Parcel> parcels= new ArrayList<>();
+        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/25"));
+        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/26"));
+        given(parcelService.getAllParcels()).willReturn(parcels);
+
+        mockMvc.perform(get("/parcels"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(new Gson().toJson(parcels,List.class)));
+    }
+    @Test
+    void should_return_the_parkingLot_List_when_find_ParkingLots_by_Page() throws Exception {
+        List<Parcel> parcels= new ArrayList<>();
+        parcels.add( new Parcel("Laura","15342217675","未取件","2019/7/25"));
+
+        given(parcelService.getAllParcels()).willReturn(parcels);
+
+        mockMvc.perform(get("/parking-lots"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(new Gson().toJson(parcels,List.class)));
+    }
+
 }

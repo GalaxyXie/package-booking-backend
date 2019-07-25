@@ -7,12 +7,17 @@ import com.oocl.packagebooking.serveice.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ParcelServiceImpl implements ParcelService {
     @Autowired
     ParcelRepository parcelRepository;
     public Parcel createParcel(Parcel parcel){
         return parcelRepository.save(parcel);
+    }
+    public List<Parcel> getAllParcels(){
+        return parcelRepository.findAll();
     }
 
 }

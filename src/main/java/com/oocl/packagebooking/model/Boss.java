@@ -30,4 +30,5 @@ public class Boss
     public void setParcels(List<Parcel> parcels) {
         this.parcels = parcels;
     }
+
 }
