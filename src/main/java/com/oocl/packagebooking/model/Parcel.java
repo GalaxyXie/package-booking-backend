@@ -9,7 +9,6 @@ import javax.persistence.Table;
 @Table
 public class Parcel {
     @Id
-    @GeneratedValue
     private int orderId;
     private String customName;
     private String telephone;
@@ -62,6 +61,21 @@ public class Parcel {
         this.status = status;
         this.appointmentTime = appointmentTime;
     }
+
+    public Parcel(String customName, String telephone, String status) {
+        this.customName = customName;
+        this.telephone = telephone;
+        this.status = status;
+    }
+
+    public Parcel(int orderId, String customName, String telephone, String status, String appointmentTime) {
+        this.orderId = orderId;
+        this.customName = customName;
+        this.telephone = telephone;
+        this.status = status;
+        this.appointmentTime = appointmentTime;
+    }
+
     public Parcel() {
     }
 }

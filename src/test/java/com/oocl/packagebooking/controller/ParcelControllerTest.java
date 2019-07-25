@@ -53,8 +53,8 @@ class ParcelControllerTest {
     @Test
     void should_return_the_Parcel_List_when_find_all_Parcels() throws Exception {
         List<Parcel> parcels= new ArrayList<>();
-        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/25"));
-        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/26"));
+        parcels.add( new Parcel(1,"Laura","15342217675","未预约","2019/7/25"));
+        parcels.add( new Parcel(2,"Laura","15342217675","未预约","2019/7/26"));
         given(parcelService.getAllParcels()).willReturn(parcels);
 
         mockMvc.perform(get("/parcels"))
@@ -64,9 +64,9 @@ class ParcelControllerTest {
     @Test
     void should_return_the_Parcel_List_when_find_Parcels_by_Status() throws Exception {
         List<Parcel> parcels = new ArrayList<>();
-        parcels.add( new Parcel("Laura","15342217675","未预约","2019/7/25"));
-        parcels.add( new Parcel("Laura","15342217675","已预约","2019/7/25"));
-        parcels.add( new Parcel("Laura","15342217675","已取件","2019/7/26"));
+        parcels.add( new Parcel(1,"Laura","15342217675","未预约","2019/7/25"));
+        parcels.add( new Parcel(2,"Laura","15342217675","已预约","2019/7/25"));
+        parcels.add( new Parcel(3,"Laura","15342217675","已取件","2019/7/26"));
         List<Parcel> returnParcels=parcels.stream().filter(parcel -> parcel.getStatus().equals("已预约")).collect(Collectors.toList());
         given(parcelService.getParcelsByStatus("已预约")).willReturn(returnParcels);
 
@@ -85,12 +85,27 @@ class ParcelControllerTest {
 
         String result=gson.toJson(newParcel);
         parcelService.createParcel(oldParcel);
-        given(parcelService.UpdateParcelStatusById(anyInt(),any(Parcel.class))).willReturn(newParcel);
+        given(parcelService.UpdateParcelById(anyInt(),any(Parcel.class))).willReturn(newParcel);
 
         mockMvc.perform(put("/parcels/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(newParcel)))
                 .andExpect(status().isOk()).andExpect(content().json(gson.toJson(newParcel)));
+    }
+    @Test
+    void should_return_wrong_when_update_Parcel_Time_out_of_range() throws Exception {
+        Gson gson = new Gson();
+        Parcel oldParcel=new Parcel("Laura","15342217675","未预约");
+        Parcel newParcel=new Parcel("Laura","15342217675","已预约","2019-07-25 23:23:00");
+        oldParcel.setOrderId(1);
+        String result=gson.toJson(newParcel);
+        parcelService.createParcel(oldParcel);
+        given(parcelService.UpdateParcelById(1,newParcel)).willThrow(new Exception("您设定的时间不在营业范围内"));
+
+        mockMvc.perform(put("/parcels/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(newParcel)))
+                .andExpect(status().isOk());
     }
 
 

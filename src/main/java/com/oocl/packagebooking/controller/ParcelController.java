@@ -24,12 +24,8 @@ public class ParcelController {
         return ResponseEntity.ok(parcelService.getParcelsByStatus(status));
     }
     @PutMapping("/parcels/{id}")
-    public ResponseEntity updateParcelByOrderid(@PathVariable int id,@RequestBody Parcel parcel){
-        return ResponseEntity.ok(parcelService.UpdateParcelStatusById(id, parcel));
+    public ResponseEntity updateParcelByOrderid(@PathVariable int id,@RequestBody Parcel parcel) throws Exception {
+        return ResponseEntity.ok(parcelService.UpdateParcelById(id, parcel));
     }
-//    @PutMapping(value = "/parcels/{id}",params = {"name"})
-////    public ResponseEntity updateParcelTimeByOrderidAndName(@PathVariable int id,@RequestParam String name,@RequestBody Parcel parcel){
-////        return ResponseEntity.ok(parcelService.UpdateParcelStatusById(id, parcel));
-////    }
 
 }
